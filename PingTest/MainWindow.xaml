@@ -1,0 +1,91 @@
+﻿<Window x:Class="PingTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:Fluent="urn:fluent-ribbon"
+        xmlns:local="clr-namespace:PingTest"
+        mc:Ignorable="d"
+        Title="Ping Test/IP Scan" Height="800" Width="600" Icon="Images\Proycontec-Robots-Robot-network.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <Fluent:Ribbon Grid.Row="0">
+                <Fluent:Ribbon.Menu>
+                    <Fluent:Backstage>
+                        <Fluent:BackstageTabControl>
+                            <Fluent:Button Header="Exit" Click="ButtonExit_Click"/>
+                        </Fluent:BackstageTabControl>
+                    </Fluent:Backstage>
+                </Fluent:Ribbon.Menu>
+                <Fluent:RibbonTabItem Header="Home">
+                    <Fluent:RibbonGroupBox Margin="0,10,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="100" Header="Scan">
+                        <Fluent:Button x:Name="buttonStart" Width="60" Header="Start" LargeIcon="Images\Iconshow-Button-Design-Pack-07-Up.ico" Click="LoadButton_Click"/>
+                    </Fluent:RibbonGroupBox>
+                    <Fluent:RibbonGroupBox Margin="0,10,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Header="IP Range">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Fluent:TextBox Grid.Row="0" Margin="0,0,0,0" HorizontalAlignment="Right" x:Name="textStart" Width="204" Header="Range Start: "/>
+                            <Fluent:TextBox Grid.Row="1" Margin="0,10,0,0" HorizontalAlignment="Right" x:Name="textEnd" Width="200" Header="Range End: "/>
+                        </Grid>
+                    </Fluent:RibbonGroupBox>
+                    <Fluent:RibbonGroupBox Margin="0,10,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Header="Options">
+                        <Fluent:CheckBox Header="Resolve DNS Name" IsChecked="False" x:Name="checkResolve"/>
+                    </Fluent:RibbonGroupBox>
+                    <Fluent:RibbonGroupBox Margin="0,10,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Header="Other">
+                        <Fluent:Button x:Name="buttonExport" Width="60" Header="Export" LargeIcon="Images\Iconshock-Cms-Publish.ico" Click="ButtonExport_Click"/>
+                    </Fluent:RibbonGroupBox>
+                </Fluent:RibbonTabItem>
+            </Fluent:Ribbon>
+        </StackPanel>
+        <xcad:DockingManager 
+                           AllowMixedOrientation="True"
+                           BorderBrush="Black"
+                           BorderThickness="5" Grid.ColumnSpan="2" Grid.Row="1">
+            <xcad:DockingManager.Theme>
+                <xcad:MetroTheme />
+            </xcad:DockingManager.Theme>
+            <xcad:LayoutRoot x:Name="_layoutRoot">
+                <xcad:LayoutPanel>
+                    <xcad:LayoutDocumentPane>
+                        <xcad:LayoutDocument CanClose="False" Title="Scan Results">
+                        <DataGrid Name="dgOutput" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Active}" Value="False">
+                                            <Setter Property="Background" Value="Red"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Active}" Value="True">
+                                            <Setter Property="Background" Value="Green"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="IP Address" Binding="{Binding IP}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Active" Binding="{Binding Active}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="DNS Name" Binding="{Binding DNSName}" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        </xcad:LayoutDocument>
+                    </xcad:LayoutDocumentPane>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+        <Fluent:StatusBar Grid.Row="2" Grid.ColumnSpan="2">
+            <Fluent:StatusBarItem Margin="0,0,0,0" Name="statusbarCount" Content="IP Count: " HorizontalAlignment="Right" />
+            <Fluent:StatusBarItem Margin="0,0,10,0" Name="statusbarIPs" Title="IPs" HorizontalAlignment="Right"/>
+            <Fluent:StatusBarItem Margin="10,0,0,0" Name="statusbarComplete" Content="Scan Complete" HorizontalAlignment="Left" Visibility="Hidden"/>
+        </Fluent:StatusBar>
+    </Grid>
+</Window>
