@@ -324,15 +324,29 @@ namespace PingTest
             return netmask;
         }
     }
-    public class IPObject
+    public class IPObject : INotifyPropertyChanged
     {
-        public IPAddress IP { get; set; }
-        public Boolean Active { get; set; }
-        public String DNSName { get; set; }
+        private IPAddress _ip;
+        private Boolean _active;
+        private String _dnsname;
+
+        public IPAddress IP { get { return _ip; } set { _ip = value; NotifyPropertyChanged("IP"); } }
+        public Boolean Active { get { return _active; } set { _active = value; NotifyPropertyChanged("Active"); } }
+        public String DNSName { get { return _dnsname; } set { _dnsname = value; NotifyPropertyChanged("DNSName"); } }
         public IPObject()
         {
+            IP = IPAddress.Parse("0.0.0.0");
             Active = false;
             DNSName = "";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }
